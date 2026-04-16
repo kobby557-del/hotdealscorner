@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HotDealsCorner - Your One-Stop Shop</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Announcement Bar -->
+    <div class="announcement-bar" id="announcementBar">
+        <p id="announcementText">Welcome to HotDealsCorner - Best Deals in Ghana!</p>
+        <button class="close-announcement" onclick="closeAnnouncement()">×</button>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo-section">
+                <img id="siteLogo" src="ASSETS-logo and icons/WhatsApp Image 2026-04-15 at 22.37.38.jpeg" alt="HotDealsCorner" class="logo">
+                <h1 id="siteTitle">HotDealsCorner</h1>
+            </div>
+            <nav>
+                <a href="#home" class="nav-link"><i class="fas fa-home"></i> Home</a>
+                <a href="#products" class="nav-link"><i class="fas fa-store"></i> Products</a>
+                <a href="#contact" class="nav-link"><i class="fas fa-phone"></i> Contact</a>
+                <a href="#" class="nav-link" onclick="checkAdminAccess(event)"><i class="fas fa-cog"></i> Admin</a>
+            </nav>
+            <div class="cart-icon" onclick="toggleCart()">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cartCount">0</span>
+            </div>
+            <div id="userSection" style="display: none;">
+                <a href="#" class="nav-link" onclick="showCustomerAccount(event)">
+                    <i class="fas fa-user"></i> <span id="userName">Account</span>
+                </a>
+            </div>
+            <div id="loginSection">
+                <a href="#" class="nav-link" onclick="showCustomerLogin(event)">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h2>Welcome to HotDealsCorner</h2>
+            <p>Your One-Stop Shop for Quality Products at Amazing Prices!</p>
+            <p class="ghs-note"><i class="fas fa-tag"></i> All Prices in Ghana Cedis (GHS)</p>
+            <a href="#products" class="btn-primary">Shop Now</a>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="categories">
+        <h2>Shop by Category</h2>
+        <div class="category-grid">
+            <div class="category-card" onclick="filterCategory('electronics')">
+                <i class="fas fa-plug"></i>
+                <span>Electrical Appliances</span>
+            </div>
+            <div class="category-card" onclick="filterCategory('kitchen')">
+                <i class="fas fa-mug-hot"></i>
+                <span>Kitchen & Dining</span>
+            </div>
+            <div class="category-card" onclick="filterCategory('office')">
+                <i class="fas fa-pen-nib"></i>
+                <span>Pens & Office</span>
+            </div>
+            <div class="category-card" onclick="filterCategory('furniture')">
+                <i class="fas fa-chair"></i>
+                <span>Gaming Chairs</span>
+            </div>
+            <div class="category-card" onclick="filterCategory('accessories')">
+                <i class="fas fa-camera"></i>
+                <span>Tripod Stands</span>
+            </div>
+            <div class="category-card" onclick="filterCategory('all')">
+                <i class="fas fa-th"></i>
+                <span>All Products</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="products-section">
+        <h2>Our Products</h2>
+        <div class="filter-bar">
+            <input type="text" id="searchInput" placeholder="Search products..." oninput="searchProducts()">
+            <select id="priceFilter" onchange="filterByPrice()">
+                <option value="all">All Prices</option>
+                <option value="0-50">Under GHS 50</option>
+                <option value="50-100">GHS 50 - 100</option>
+                <option value="100-200">GHS 100 - 200</option>
+                <option value="200+">GHS 200+</option>
+            </select>
+        </div>
+        <div id="productsGrid" class="products-grid">
+            <!-- Products will be loaded here -->
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <h2>Contact Us</h2>
+        <div class="contact-container">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span id="contactPhone">+233 20 000 0000</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span id="contactEmail">contact@hotdealscorner.com</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span id="contactAddress">Ghana</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fab fa-whatsapp"></i>
+                    <span id="contactWhatsapp">+233 20 000 0000</span>
+                </div>
+            </div>
+            <div class="contact-form">
+                <h3>Send us a Message</h3>
+                <form onsubmit="sendMessage(event)">
+                    <input type="text" id="messageName" placeholder="Your Name" required>
+                    <input type="email" id="messageEmail" placeholder="Your Email" required>
+                    <input type="tel" id="messagePhone" placeholder="Your Phone Number">
+                    <textarea id="messageText" placeholder="Your Message" rows="5" required></textarea>
+                    <button type="submit" class="btn-primary">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Login Modal -->
+    <div id="adminLoginModal" class="modal">
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            <span class="close" onclick="closeAdminLogin()">×</span>
+            <h2>Admin Login</h2>
+            <p style="margin-bottom: 20px; color: #7f8c8d;">Enter your admin password to access the admin panel</p>
+            <form onsubmit="verifyAdminPassword(event)">
+                <div class="form-group">
+                    <input type="password" id="adminPasswordInput" placeholder="Enter password" required>
+                </div>
+                <button type="submit" class="btn-primary btn-full">Login</button>
+            </form>
+            <p id="loginError" style="color: #e74c3c; margin-top: 15px; display: none;">Incorrect password!</p>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <section id="admin" class="admin-section">
+        <h2>Admin Panel</h2>
+        <div class="admin-tabs">
+            <button class="admin-tab active" onclick="showAdminTab('settings')">Site Settings</button>
+            <button class="admin-tab" onclick="showAdminTab('products')">Manage Products</button>
+            <button class="admin-tab" onclick="showAdminTab('orders')">Orders</button>
+            <button class="admin-tab" onclick="showAdminTab('messages')">Messages</button>
+        </div>
+
+        <!-- Settings Tab -->
+        <div id="admin-settings" class="admin-content">
+            <h3>Site Settings</h3>
+            <form onsubmit="saveSettings(event)">
+                <div class="form-group">
+                    <label>Site Name</label>
+                    <input type="text" id="adminSiteName" placeholder="Enter site name">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="adminPhone" placeholder="+233 XX XXX XXXX">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="adminEmail" placeholder="email@example.com">
+                </div>
+                <div class="form-group">
+                    <label>WhatsApp Number</label>
+                    <input type="tel" id="adminWhatsapp" placeholder="+233 XX XXX XXXX">
+                </div>
+                <div class="form-group">
+                    <label>MTN MoMo Number (for payments)</label>
+                    <input type="tel" id="adminMomoNumber" placeholder="+233 XX XXX XXXX">
+                    <small style="color: #7f8c8d;">Customers will send money to this number</small>
+                </div>
+                <div class="form-group">
+                    <label>Bank Account Details</label>
+                    <input type="text" id="adminBankName" placeholder="Bank Name (e.g., Ghana Commercial Bank)">
+                    <input type="text" id="adminAccountName" placeholder="Account Name" style="margin-top: 5px;">
+                    <input type="text" id="adminAccountNumber" placeholder="Account Number" style="margin-top: 5px;">
+                    <small style="color: #7f8c8d;">For bank transfers</small>
+                </div>
+                <div class="form-group">
+                    <label>Shop Address (for delivery calculations)</label>
+                    <input type="text" id="adminAddress" placeholder="Enter your shop address">
+                </div>
+                <div class="form-group">
+                    <label>Default Delivery Price (GHS)</label>
+                    <input type="number" id="defaultDeliveryPrice" placeholder="e.g., 20" value="15">
+                    <small style="color: #7f8c8d;">This price will auto-fill for Uber/Bolt delivery</small>
+                </div>
+                <div class="form-group">
+                    <label>Announcement</label>
+                    <textarea id="adminAnnouncement" placeholder="Enter announcement" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Admin Password</label>
+                    <input type="password" id="adminPassword" placeholder="Set admin password">
+                    <small style="color: #7f8c8d;">This password will protect your admin panel</small>
+                </div>
+                <button type="submit" class="btn-primary">Save Settings</button>
+            </form>
+        </div>
+
+        <!-- Products Tab -->
+        <div id="admin-products" class="admin-content" style="display:none;">
+            <h3>Manage Products</h3>
+            <form onsubmit="addProduct(event)" class="add-product-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Product Name</label>
+                        <input type="text" id="productName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Price (GHS)</label>
+                        <input type="number" id="productPrice" step="0.01" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="productCategory">
+                            <option value="electronics">Electrical Appliances</option>
+                            <option value="kitchen">Kitchen & Dining</option>
+                            <option value="office">Pens & Office</option>
+                            <option value="furniture">Gaming Chairs</option>
+                            <option value="accessories">Tripod Stands</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Stock Quantity</label>
+                        <input type="number" id="productStock" value="1" min="1">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="productDescription" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Product Image</label>
+                    <input type="file" id="productImage" accept="image/*" onchange="previewProductImage(event)">
+                    <input type="hidden" id="productImageBase64">
+                    <div id="imagePreview" style="display:none; margin-top: 10px;">
+                        <img id="previewImg" style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px;">
+                        <button type="button" onclick="removeProductImage()" style="margin-left: 10px; padding: 5px 10px; background: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">Remove</button>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary">Add Product</button>
+            </form>
+
+            <h4>Existing Products</h4>
+            <div id="adminProductsList"></div>
+        </div>
+
+        <!-- Orders Tab -->
+        <div id="admin-orders" class="admin-content" style="display:none;">
+            <h3>Orders</h3>
+            <div id="ordersList"></div>
+        </div>
+
+        <!-- Messages Tab -->
+        <div id="admin-messages" class="admin-content" style="display:none;">
+            <h3>Customer Messages</h3>
+            <div id="messagesList"></div>
+        </div>
+    </section>
+
+    <!-- Cart Sidebar -->
+    <div id="cartSidebar" class="cart-sidebar">
+        <div class="cart-header">
+            <h3>Shopping Cart</h3>
+            <button class="close-cart" onclick="toggleCart()">×</button>
+        </div>
+        <div id="cartItems" class="cart-items">
+            <p class="empty-cart">Your cart is empty</p>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">GHS 0.00</span>
+            </div>
+            <button class="btn-primary checkout-btn" onclick="showCheckout()">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Customer Login Modal -->
+    <div id="customerLoginModal" class="modal">
+        <div class="modal-content" style="max-width: 450px;">
+            <span class="close" onclick="closeCustomerLogin()">×</span>
+            <div id="loginForm">
+                <h2 style="text-align: center; color: #ff6b9d;">Customer Login</h2>
+                <form onsubmit="customerLogin(event)">
+                    <div class="form-group">
+                        <label>Phone Number or Email</label>
+                        <input type="text" id="loginIdentity" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="btn-primary btn-full">Login</button>
+                </form>
+                <p style="text-align: center; margin-top: 15px;">
+                    Don't have an account? 
+                    <a href="#" onclick="showRegisterForm(event)" style="color: #ff6b9d; font-weight: bold;">Register</a>
+                </p>
+            </div>
+            <div id="registerForm" style="display: none;">
+                <h2 style="text-align: center; color: #ff6b9d;">Create Account</h2>
+                <form onsubmit="customerRegister(event)">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="regName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone Number</label>
+                        <input type="tel" id="regPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="regEmail">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="regPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" id="regConfirmPassword" required>
+                    </div>
+                    <button type="submit" class="btn-primary btn-full">Create Account</button>
+                </form>
+                <p style="text-align: center; margin-top: 15px;">
+                    Already have an account? 
+                    <a href="#" onclick="showLoginForm(event)" style="color: #ff6b9d; font-weight: bold;">Login</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer Account Modal -->
+    <div id="customerAccountModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <span class="close" onclick="closeCustomerAccount()">×</span>
+            <h2 style="text-align: center; color: #ff6b9d;">My Account</h2>
+            <div id="accountInfo" style="background: #fff5f7; padding: 20px; border-radius: 15px; margin-bottom: 20px;">
+                <p><strong>Name:</strong> <span id="accName"></span></p>
+                <p><strong>Phone:</strong> <span id="accPhone"></span></p>
+                <p><strong>Email:</strong> <span id="accEmail"></span></p>
+            </div>
+            <h3 style="margin-bottom: 15px;">My Orders</h3>
+            <div id="customerOrders" style="max-height: 300px; overflow-y: auto;"></div>
+            <button class="btn-primary btn-full" style="margin-top: 20px;" onclick="customerLogout()">Logout</button>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content checkout-modal">
+            <span class="close" onclick="closeCheckout()">×</span>
+            <h2>Checkout</h2>
+            <form id="checkoutForm" onsubmit="processCheckout(event)">
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="checkoutName" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number *</label>
+                    <input type="tel" id="checkoutPhone" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="checkoutEmail">
+                </div>
+                <div class="form-group">
+                    <label>Delivery Address *</label>
+                    <textarea id="checkoutAddress" rows="2" required></textarea>
+                </div>
+                <div class="delivery-option">
+                    <h4>Delivery Method</h4>
+                    <div class="payment-option">
+                        <input type="radio" name="delivery" id="pickup" value="pickup" checked onchange="toggleDelivery()">
+                        <label for="pickup"><i class="fas fa-store"></i> Pickup from Shop</label>
+                    </div>
+                    <div class="payment-option">
+                        <input type="radio" name="delivery" id="uberDelivery" value="uber" onchange="toggleDelivery()">
+                        <label for="uberDelivery"><i class="fas fa-car"></i> Uber Delivery</label>
+                    </div>
+                    <div class="payment-option">
+                        <input type="radio" name="delivery" id="boltDelivery" value="bolt" onchange="toggleDelivery()">
+                        <label for="boltDelivery"><i class="fas fa-taxi"></i> Bolt Delivery</label>
+                    </div>
+                </div>
+                <div id="deliveryInfo" class="payment-details">
+                    <p>Select a delivery method to see details</p>
+                </div>
+                <div id="deliveryPriceSection" style="margin-top: 15px; display:none;">
+                    <div class="form-group">
+                        <label>Delivery Price (GHS)</label>
+                        <input type="number" id="deliveryPriceInput" placeholder="e.g., 20" oninput="updateDeliveryPrice()">
+                    </div>
+                </div>
+                <div class="payment-methods">
+                    <h4>Payment Method</h4>
+                    <div class="payment-option">
+                        <input type="radio" name="payment" id="mobileMoney" value="mobile_money" checked>
+                        <label for="mobileMoney"><i class="fas fa-mobile-alt"></i> Mobile Money (MoMo)</label>
+                    </div>
+                    <div class="payment-option">
+                        <input type="radio" name="payment" id="bankTransfer" value="bank_transfer">
+                        <label for="bankTransfer"><i class="fas fa-university"></i> Bank Transfer</label>
+                    </div>
+                    <div class="payment-option">
+                        <input type="radio" name="payment" id="cashOnDelivery" value="cash_on_delivery">
+                        <label for="cashOnDelivery"><i class="fas fa-money-bill-wave"></i> Cash on Delivery</label>
+                    </div>
+                </div>
+                <div id="paymentDetails" class="payment-details">
+                    <p id="paymentInfo">Select a payment method to see details</p>
+                </div>
+                <div class="order-summary">
+                    <h4>Order Summary</h4>
+                    <div id="checkoutItems"></div>
+                    <div class="summary-total">
+                        <span>Total:</span>
+                        <span id="checkoutTotal">GHS 0.00</span>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary btn-full">Place Order</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>HotDealsCorner</h3>
+                <p>Your trusted online shopping destination in Ghana</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <a href="#home">Home</a>
+                <a href="#products">Products</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Info</h4>
+                <p><i class="fas fa-phone"></i> <span id="footerPhone">+233 20 000 0000</span></p>
+                <p><i class="fas fa-envelope"></i> <span id="footerEmail">contact@hotdealscorner.com</span></p>
+                <p><i class="fas fa-map-marker-alt"></i> <span id="footerAddress">Ghana</span></p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 HotDealsCorner. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
